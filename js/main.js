@@ -43,7 +43,7 @@ const MOTION = {
 const I18N = {
   es: {
     menu: 'Menú', close: 'Cerrar', nav_home: 'Inicio', nav_gallery: 'Galería', nav_about: 'Sobre mí', nav_contact: 'Contacto',
-    hero_kicker: 'Fotografía y vídeo', hero_tag: 'Putita',
+    hero_kicker: 'Fotografía y vídeo', hero_tag: 'Fotografo, Videografo, Artista 3D y VFX',
     cta_gallery: 'Ver galería', cta_contact: 'Contactar', chip1: 'Impresión 3D', chip2: 'Producción y postproducción', chip3: 'Suite Adobe', chip4: 'Blender', chip5: 'Maya', chip6: 'VFX', chip7: 'Motion graphics', chip8: 'Fotografía y vídeo',
     gallery_title: 'Galería', about_title: 'Sobre mí',
     about_text: 'Soy Álvaro Mora, fotógrafo y videógrafo. Trabajo con luz artificial, color y contraste para contar historias urbanas y retratos con carácter. Si tienes un proyecto en mente, escríbeme.',
