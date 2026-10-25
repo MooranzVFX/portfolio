@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Álvaro Mora · Portfolio</title>
+  <meta name="description" content="Portfolio de fotografía y vídeo de Álvaro Mora.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Orbitron:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Pantalla de carga -->
+  <div class="loader" id="loader">
+    <div class="loader-in">
+      <div class="loader-count" id="loaderCount">0</div>
+      <div class="loader-name" id="loaderName"></div>
+    </div>
+  </div>
+
+  <!-- CAPAS: fondo → medio → (contenido) → frontal → grano -->
+  <div class="layer layer-bg" data-layer="0.3" aria-hidden="true">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  </div>
+  <div class="layer layer-mid" id="layerMid" data-layer="1" aria-hidden="true"></div>
+  <div class="layer layer-front" id="layerFront" data-layer="1" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="progress" id="progress"></div>
+
+  <!-- Cabecera -->
+  <header class="header">
+    <a href="#top" class="logo" id="logo" data-cursor="link"></a>
+    <div class="header-right">
+      <div class="lang" id="lang">
+        <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false" aria-label="Idioma / Language">ES ▾</button>
+        <div class="lang-menu" role="menu">
+          <button role="menuitem" data-lang="es">Español</button>
+          <button role="menuitem" data-lang="en">English</button>
+        </div>
+      </div>
+      <button class="burger magnetic" id="burger" aria-expanded="false" data-i18n="menu">Menú</button>
+    </div>
+  </header>
+
+  <!-- Menú pantalla completa -->
+  <div class="menu" id="menu">
+    <nav>
+      <a href="#top" style="--i:0" data-i18n="nav_home">Inicio</a>
+      <a href="#galeria" style="--i:1" data-i18n="nav_gallery">Galería</a>
+      <a href="#sobre-mi" style="--i:2" data-i18n="nav_about">Sobre mí</a>
+      <a href="#contacto" style="--i:3" data-i18n="nav_contact">Contacto</a>
+    </nav>
+  </div>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <p class="hero-kicker mask"><span data-i18n="hero_kicker"></span></p>
+      <h1 id="heroTitle" aria-label="Álvaro Mora"></h1>
+      <p class="hero-tag mask"><span data-i18n="hero_tag"></span></p>
+      <div class="hero-cta">
+        <a href="#galeria" class="btn magnetic" data-i18n="cta_gallery"></a>
+        <a href="#contacto" class="btn alt magnetic" data-i18n="cta_contact"></a>
+      </div>
+      <div class="float orb" data-depth="0.9" aria-hidden="true"><i></i></div>
+      <div class="float f1" data-depth="0.5" aria-hidden="true"><span class="glass" data-i18n="chip1"></span></div>
+      <div class="float f2" data-depth="0.8" aria-hidden="true"><span class="glass" data-i18n="chip2"></span></div>
+      <div class="float f3" data-depth="0.3" aria-hidden="true"><span class="glass" data-i18n="chip3"></span></div>
+      <div class="float f4" data-depth="0.6" aria-hidden="true"><span class="glass" data-i18n="chip4"></span></div>
+      <div class="float f5" data-depth="0.4" aria-hidden="true"><span class="glass" data-i18n="chip5"></span></div>
+      <div class="float f6" data-depth="0.7" aria-hidden="true"><span class="glass" data-i18n="chip6"></span></div>
+      <div class="float f7" data-depth="0.2" aria-hidden="true"><span class="glass" data-i18n="chip7"></span></div>
+      <div class="float f8" data-depth="0.5" aria-hidden="true"><span class="glass" data-i18n="chip8"></span></div>
+    </section>
+
+    <!-- Texto gigante ligado al scroll -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-row" data-dir="-1"><span>FOTOGRAFÍA</span><span>VIDEO</span><span>FOTOGRAFÍA</span><span>VIDEO</span></div>
+      <div class="marquee-row out" data-dir="1"><span>3D</span><span>ARTE</span><span>VFX</span><span>ARTE</span><span>3D</span></div>
+    </div>
+
+    <!-- GALERÍA -->
+    <section id="galeria">
+      <h2 class="title mask"><span data-i18n="gallery_title" data-reveal></span></h2>
+      <div class="filters" id="filters"></div>
+      <div class="bento" id="bento"></div>
+      <p class="empty" id="empty" hidden></p>
+    </section>
+
+    <!-- SOBRE MÍ -->
+    <section id="sobre-mi" class="about">
+      <div class="about-photo" data-reveal-img><img id="aboutPhoto" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+      <div>
+        <h2 class="title mask"><span data-i18n="about_title" data-reveal></span></h2>
+        <p data-i18n="about_text" data-fade></p>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto">
+      <h2 class="title mask"><span data-i18n="contact_title" data-reveal></span></h2>
+      <div class="contact-grid">
+        <a class="card tilt" id="cIg" target="_blank" rel="noopener" data-cursor="card"><small>Instagram</small><strong></strong></a>
+        <a class="card tilt" id="cMail" data-cursor="card"><small>Email</small><strong></strong></a>
+        <a class="card tilt" id="cTel" data-cursor="card"><small data-i18n="phone"></small><strong></strong></a>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <!-- VISOR: fotos y vídeos -->
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Visor">
+    <button class="lb-x" id="lbX" aria-label="Cerrar / Close">✕</button>
+    <button class="lb-nav prev" id="lbPrev" aria-label="Anterior / Previous">‹</button>
+    <button class="lb-nav next" id="lbNext" aria-label="Siguiente / Next">›</button>
+    <div class="lb-stage" id="lbStage"></div>
+    <div class="lb-cap"><h3 id="lbTitle"></h3><p id="lbDesc"></p></div>
+  </div>
+
+  <div class="cursor" id="cursor"></div><div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- Librerías con versión fija (sin compilar) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
