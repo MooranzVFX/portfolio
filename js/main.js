@@ -9,7 +9,7 @@ const CONFIG = {
   TAG: 'portfolio',              // ← etiqueta de las imágenes en Cloudinary
   NAME: 'Álvaro Mora',           // ← tu nombre / marca
   VIDEOS_JSON: 'videos.json',    // ← lista de vídeos de YouTube
-  ABOUT_PHOTO: 'img/alvaro.jpg', // ← foto de "Sobre mí" (ruta local o URL de Cloudinary)
+  ABOUT_PHOTO: 'img/alvaro.png', // ← foto de "Sobre mí" (ruta local o URL de Cloudinary)
   CATEGORIES: [                  // ← filtros: id "all" muestra todo; "images" y "videos" filtran por tipo
     { id: 'all',    label: { es: 'Todo',     en: 'All' } },
     { id: 'images', label: { es: 'Imágenes', en: 'Images' } },
@@ -43,7 +43,7 @@ const MOTION = {
 const I18N = {
   es: {
     menu: 'Menú', close: 'Cerrar', nav_home: 'Inicio', nav_gallery: 'Galería', nav_about: 'Sobre mí', nav_contact: 'Contacto',
-    hero_kicker: 'Fotografía y vídeo', hero_tag: 'Fotografo, Videografo, Artista 3D y VFX',
+    hero_kicker: 'Fotografía y vídeo', hero_tag: 'Luz, neón y silencio: retratos y escenas urbanas capturadas de noche.',
     cta_gallery: 'Ver galería', cta_contact: 'Contactar', chip1: 'Impresión 3D', chip2: 'Producción y postproducción', chip3: 'Suite Adobe', chip4: 'Blender', chip5: 'Maya', chip6: 'VFX', chip7: 'Motion graphics', chip8: 'Fotografía y vídeo',
     gallery_title: 'Galería', about_title: 'Sobre mí',
     about_text: 'Soy Álvaro Mora, fotógrafo y videógrafo. Trabajo con luz artificial, color y contraste para contar historias urbanas y retratos con carácter. Si tienes un proyecto en mente, escríbeme.',
@@ -141,12 +141,7 @@ function renderGallery() {
   $('#empty').hidden = shown.length > 0;
   $('#empty').textContent = T('empty');
   bento.innerHTML = shown.map((it, n) => {
-    // "wide": panorámicas y vídeos ocupan 2 columnas; cada 7ª foto casi cuadrada se destaca
-    const r = it.w / it.h;
-    it.ratio = r;
-    it.feat = it.type === 'img' && n % 7 === 3 && r > .75 && r < 1.5;
-    it.wide = it.type === 'video' || r > 1.9;
-    const src = it.thumb(it.wide || it.feat ? 1000 : 640);
+    const src = it.thumb(1200);
     return `<figure class="item" data-i="${n}" tabindex="0" role="button" aria-label="${tr(it.title)}">
       <div class="tile"><img src="${src}" alt="${tr(it.title)}" loading="lazy" decoding="async">${it.type === 'video' ? '<span class="play"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></span>' : ''}${it.type === 'ba' ? '<span class="badge">⟷</span>' : ''}</div></figure>`;
   }).join('');
@@ -154,18 +149,27 @@ function renderGallery() {
   revealTiles();
 }
 
-// Calcula cuántas columnas (1 o 2) y filas (de 4px) ocupa cada celda según su proporción
+// Filas justificadas: cada fila rellena todo el ancho; todas las fotos mantienen su proporción
+// (sin recortes) y la altura de cada fila se queda muy cerca de --row-h.
+const GAP = 12;
 function layout() {
-  const cols = getComputedStyle(bento).gridTemplateColumns.split(' ');
-  const n = cols.length, colW = parseFloat(cols[0]);
+  const W = bento.clientWidth;
+  if (!W || !shown.length) return;
+  const target = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--row-h')) || 380;
   const els = [...bento.children];
-  const calc = els.map((el, i) => {
-    const it = shown[i];
-    const span = (it.feat && n >= 3) || (it.wide && n >= 2) ? 2 : 1;
-    const h = (colW * span) / it.ratio;
-    return { el, span, rows: Math.max(8, Math.round(h / 4)) };
+  let row = [], sum = 0;
+  const flush = last => {
+    let h = (W - GAP * (row.length - 1)) / sum;
+    if (last && h > target) h = target;          // la última fila no se estira
+    row.forEach(o => { o.el.style.width = Math.floor(o.r * h) + 'px'; o.el.style.height = h.toFixed(1) + 'px'; });
+    row = []; sum = 0;
+  };
+  els.forEach((el, i) => {
+    const r = shown[i].w / shown[i].h;
+    row.push({ el, r }); sum += r;
+    if (sum * target + GAP * (row.length - 1) >= W) flush(false);
   });
-  calc.forEach(c => { c.el.style.gridColumn = 'span ' + c.span; c.el.style.gridRow = 'span ' + c.rows; });
+  if (row.length) flush(true);
 }
 
 function revealTiles() {
@@ -447,6 +451,6 @@ async function boot() {
     $('#empty').textContent = T('error');
   }
   // Recalcula el mosaico al redimensionar
-  let raf; new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => shown.length && layout()); }).observe(bento);
+  let raf; new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(layout); }).observe(bento);
 }
 boot();
